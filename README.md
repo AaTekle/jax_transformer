@@ -456,7 +456,7 @@ This process allows the model to generate variable-length text.
 
 JAX compiles operations using XLA (Accelerated Linear Algebra).
 
-Benefits:
+Advantages:
 - optimized GPU kernels (specialized function within Graphics Processing Unit (GPU), executed simultaneously in parallel by thousands or millions of threads to process massive datasets efficiently.)
 - operation fusion (ML compiler optimization that combines multiple consecutive tensor operations into a single GPU kernel)
 - optimized tensor execution
