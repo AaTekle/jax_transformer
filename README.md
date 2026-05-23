@@ -437,7 +437,7 @@ At each step:
 
 Mathematically:
 
-```math
+``` math
 x_t ~ P(x_t | x_<t)
 ```
 
