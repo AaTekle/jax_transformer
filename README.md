@@ -38,7 +38,7 @@ She around across the watch money and the twins people every day. She looked mys
 ```
 ---
 
-## Technologies Used
+## Dependencies Used
 
 ### Dependencies
 
