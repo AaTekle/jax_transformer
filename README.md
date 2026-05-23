@@ -391,7 +391,7 @@ AdamW helps the model converge faster and train more reliably, especially in dee
 
 Training was performed on an NVIDIA RTX GPU using JAX XLA compilation.
 
-Observed loss progression:
+Loss function progression:
 
 ```text
 step=0     loss=4.8179
