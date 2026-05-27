@@ -462,8 +462,6 @@ Advantages:
 - optimized tensor execution
     - optimized tensor execution via  pure functional programming + XLA (Accelerated Linear Algebra) compilation 
 
-#### Note: This model was trained on my personal NVIDIA GeForce RTX GPU.
-
 ---
 
 # Running the Project (within your own local environment)
