@@ -124,7 +124,7 @@ h_i = x_i + p_i
 
 Where:
 - $x_i$ = token embedding
-- $p_i = positional embedding
+- $p_i$ = positional embedding
 
 This allows the model to learn sequence order.
 
