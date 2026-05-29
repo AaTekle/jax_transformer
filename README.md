@@ -108,9 +108,9 @@ x_i = E[t_i]
 ```
 
 Where:
-- `t_i` is token index
-- `E` is embedding matrix
-- `x_i` is embedded token vector
+- $t_i$ is token index
+- $E$ is embedding matrix
+- $x_i$ is embedded token vector
 
 ---
 
@@ -123,8 +123,8 @@ h_i = x_i + p_i
 ```
 
 Where:
-- `x_i` = token embedding
-- `p_i` = positional embedding
+- $x_i$ = token embedding
+- $p_i = positional embedding
 
 This allows the model to learn sequence order.
 
@@ -159,17 +159,17 @@ Attention(Q, K, V) = softmax((QKᵀ) / √dₖ)V
 ```
 
 Where:
-- `Q`: query matrix representing what each token is searching for
+- $Q$: query matrix representing what each token is searching for
 
-- `K`: key matrix representing what information each token contains
+- $K$: key matrix representing what information each token contains
 
-- `V`: value matrix containing the actual token information
+- $V$: value matrix containing the actual token information
 
-- `QKᵀ`: computes similarity scores between tokens
+- $QKᵀ$: computes similarity scores between tokens
 
-- `√dₖ`: scaling factor used for numerical stability
+- $√dₖ$: scaling factor used for numerical stability
 
-- `softmax`: converts scores into probabilities
+- $softmax$: converts scores into probabilities
 
 
 ## Multi-Head Attention
@@ -214,9 +214,9 @@ V = XW_V
 ```
 
 Where:
-- `Q` = queries
-- `K` = keys
-- `V` = values
+- $Q$ = queries
+- $K$ = keys
+- $V$ = values
 
 ---
 
@@ -230,9 +230,9 @@ They are computed using:
 Attention(Q, K, V) = softmax((QKᵀ) / √dₖ)V
 ```
 Where:
-- `QKᵀ` computes similarity between tokens
-- `d_k` is the key vector dimension used for scaling
-- `softmax` converts scores into probabilities
+- $QKᵀ$ computes similarity between tokens
+- $d_k$ is the key vector dimension used for scaling
+- $softmax$ converts scores into probabilities
 
 Higher attention scores mean the model focuses more strongly on those tokens when predicting the next token.
 
@@ -274,22 +274,22 @@ Each Transformer block also includes a feed-forward neural network (MLP).
 ```math
 FFN(x) = W₂ · GELU(W₁x + b₁) + b₂
 ```
-- `x`: input token representation entering the feed-forward network
+- $x$: input token representation entering the feed-forward network
 
-- `W₁`
+- $W₁$
   - first weight matrix
   - projects the input into a higher-dimensional space
 
-- `b₁`: bias vector added after the first linear transformation
+- $b₁$: bias vector added after the first linear transformation
 
-- `GELU`: activation function (Gaussian Error Linear Unit)
+- $GELU$: activation function (Gaussian Error Linear Unit)
   - introduces nonlinearity so the model can learn complex patterns
 
-- `W₂`
+- $W₂$
   - second weight matrix
   - projects the representation back to the original embedding dimension
 
-- `b₂`: second bias vector added after the final projection
+- $b₂$: second bias vector added after the final projection
 
 This layer processes each token independently after the attention operation.
 
@@ -311,15 +311,15 @@ LayerNorm(x) = ((x - μ) / √(σ² + ε))γ + β
 ```
 
 Where:
-- `μ`: mean of the activations
+- $μ$: mean of the activations
 
-- `σ²`: variance of the activations
+- $σ²$: variance of the activations
 
-- `ε`: small constant added for numerical stability
+- $ε$: small constant added for numerical stability
 
-- `γ`: learned scaling parameter
+- $γ$: learned scaling parameter
 
-- `β`: learned shifting parameter
+- $β$: learned shifting parameter
 
 Benefits of Layer normalization:
 - smoother gradient flow
@@ -341,13 +341,13 @@ L = -Σ yᵢ log(pᵢ)
 ```
 
 Where:
-- `L`: total loss value
+- $L$: total loss value
 
-- `yᵢ`: true probability distribution for the correct token
+- $yᵢ$: true probability distribution for the correct token
 
-- `pᵢ`: predicted probability for each token
+- $pᵢ$: predicted probability for each token
 
-- `log`: logarithm used to penalize incorrect confident predictions
+- $log$: logarithm used to penalize incorrect confident predictions
 
 The objective is to minimize loss by increasing the probability assigned to the correct next token during training.
 
@@ -371,17 +371,17 @@ Parameter updates are computed using:
 ```
 
 Where:
-- `θₜ`: current model parameters
+- $θₜ$: current model parameters
 
-- `θₜ₊₁`: updated parameters after optimization
+- $θₜ₊₁$: updated parameters after optimization
 
-- `η`: learning rate controlling update size
+- $η$: learning rate controlling update size
 
-- `mₜ`: momentum estimate tracking average gradients
+- $mₜ$: momentum estimate tracking average gradients
 
-- `vₜ`: variance estimate tracking gradient magnitude
+- $vₜ$: variance estimate tracking gradient magnitude
 
-- `ε`: small constant added for numerical stability
+- $ε$: small constant added for numerical stability
 
 AdamW helps the model converge faster and train more reliably, especially in deep neural networks such as Transformers.
 
@@ -442,11 +442,11 @@ x_t ~ P(x_t | x_<t)
 ```
 
 Where:
-- `xₜ`: the next token being generated
+- $xₜ$: the next token being generated
 
-- `x<t`: all previous tokens before position `t`
+- $x<t$: all previous tokens before position `t`
 
-- `P(xₜ | x<t)`: the probability distribution for the next token given the previous context
+- $P(xₜ | x<t)$: the probability distribution for the next token given the previous context
 
 This process allows the model to generate variable-length text.
 
