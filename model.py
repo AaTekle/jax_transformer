@@ -73,12 +73,20 @@ class MultiHeadSelfAttention(nn.Module):
         )
 
         # Use attention weights to combine information from relevant tokens.
+        '''
+        jnp.einsum computes the weighted sum of value vectors using attention weights (i.e. context projection)
+        optimized way to calculate the final output of a multi-head self-attention block, returning a tensor with the shape (B, T, h, d).
+        '''
         out = jnp.einsum(
             "bhts,bshd->bthd",
             attn,
             v
         )
 
+        '''
+        out.reshape flattens the multi-head dimension (h) and the head dimension (d) into a single, unified channel dimension (C). 
+        prepares the multi-head attention output to be passed into a linear layer or residual connection.
+        '''
         out = out.reshape(
             B,
             T,
