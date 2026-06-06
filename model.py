@@ -5,17 +5,23 @@ from flax import linen as nn
 
 
 class MultiHeadSelfAttention(nn.Module):
+    # Embedding size for each token representation.
     embed_dim: int
+
+    # Number of attention heads used to learn different token relationships.
     num_heads: int
 
     @nn.compact
     def __call__(self, x):
+        # B = batch size, T = sequence length, C = embedding dimension.
         B, T, C = x.shape
 
+        # Split the embedding across multiple attention heads.
         head_dim = (
             C // self.num_heads
         )
 
+        # Create queries (q), keys (k), and values (v), the core inputs used by self-attention to determine which tokens matter most.
         qkv = nn.Dense(
             3 * C
         )(x)
@@ -38,16 +44,19 @@ class MultiHeadSelfAttention(nn.Module):
         k = k.squeeze(2)
         v = v.squeeze(2)
 
+        # Compute attention scores between all token pairs.
         attn = jnp.einsum(
             "bthd,bshd->bhts",
             q,
             k
         )
 
+        # Scale scores for more stable training.
         attn = (
             attn / jnp.sqrt(head_dim)
         )
 
+        # Prevent tokens from attending to future tokens during training.
         mask = jnp.tril(
             jnp.ones((T, T))
         )
@@ -58,11 +67,13 @@ class MultiHeadSelfAttention(nn.Module):
             attn
         )
 
+        # Convert attention scores into probabilities.
         attn = nn.softmax(
             attn,
             axis=-1
         )
 
+        # Use attention weights to combine information from relevant tokens.
         out = jnp.einsum(
             "bhts,bshd->bthd",
             attn,
@@ -79,10 +90,13 @@ class MultiHeadSelfAttention(nn.Module):
 
 
 class FeedForward(nn.Module):
+    # Small neural network applied independently to each token.
     embed_dim: int
 
     @nn.compact
     def __call__(self, x):
+        # Expand the representation, apply a non-linearity, then project
+        # back down to the original embedding size.
         x = nn.Dense(
             4 * self.embed_dim
         )(x)
@@ -102,6 +116,8 @@ class TransformerBlock(nn.Module):
 
     @nn.compact
     def __call__(self, x):
+        # Residual connection allows attention to improve the representation
+        # without losing the original information.
         x = x + MultiHeadSelfAttention(
             self.embed_dim,
             self.num_heads
@@ -109,6 +125,7 @@ class TransformerBlock(nn.Module):
             nn.LayerNorm()(x)
         )
 
+        # Residual connection around the feed-forward network.
         x = x + FeedForward(
             self.embed_dim
         )(
@@ -119,30 +136,40 @@ class TransformerBlock(nn.Module):
 
 
 class GPT(nn.Module):
+    # Number of unique tokens the model can predict.
     vocab_size: int
+
+    # Maximum sequence length supported by the model.
     block_size: int
+
     embed_dim: int
     num_heads: int
     num_layers: int
 
     @nn.compact
     def __call__(self, idx):
+        # B = batch size, T = sequence length.
         B, T = idx.shape
 
+        # Convert token IDs into learned vector representations.
         tok_emb = nn.Embed(
             self.vocab_size,
             self.embed_dim
         )(idx)
 
+        # Generate token positions so the model knows token order.
         pos = jnp.arange(T)
 
+        # Learn a representation for each position in the sequence.
         pos_emb = nn.Embed(
             self.block_size,
             self.embed_dim
         )(pos)
 
+        # Combine token meaning with position information.
         x = tok_emb + pos_emb
 
+        # Stack multiple transformer blocks to learn complex language patterns.
         for _ in range(
             self.num_layers
         ):
@@ -153,6 +180,7 @@ class GPT(nn.Module):
 
         x = nn.LayerNorm()(x)
 
+        # Produce scores for every possible next token.
         logits = nn.Dense(
             self.vocab_size
         )(x)
