@@ -3,6 +3,9 @@ import jax.numpy as jnp
 
 from flax import linen as nn
 
+'''
+whole script is about moving information through clean, predictable tensor shapes at every step.
+'''
 
 class MultiHeadSelfAttention(nn.Module):
     # Embedding size for each token representation.
@@ -11,6 +14,7 @@ class MultiHeadSelfAttention(nn.Module):
     # Number of attention heads used to learn different token relationships.
     num_heads: int
 
+    # decorator within JAX that allows you to define neural network submodules (making code look clean & concise)
     @nn.compact
     def __call__(self, x):
         # B = batch size, T = sequence length, C = embedding dimension.
@@ -44,19 +48,19 @@ class MultiHeadSelfAttention(nn.Module):
         k = k.squeeze(2)
         v = v.squeeze(2)
 
-        # Compute attention scores between all token pairs.
+        # Computing attention scores between all token pairs.
         attn = jnp.einsum(
             "bthd,bshd->bhts",
             q,
             k
         )
 
-        # Scale scores for more stable training.
+        # Scaling scores for more stable training.
         attn = (
             attn / jnp.sqrt(head_dim)
         )
 
-        # Prevent tokens from attending to future tokens during training.
+        # Preventing tokens from attending to future tokens during training.
         mask = jnp.tril(
             jnp.ones((T, T))
         )
@@ -67,7 +71,7 @@ class MultiHeadSelfAttention(nn.Module):
             attn
         )
 
-        # Convert attention scores into probabilities.
+        # Converting attention scores into probabilities.
         attn = nn.softmax(
             attn,
             axis=-1
@@ -95,7 +99,7 @@ class FeedForward(nn.Module):
 
     @nn.compact
     def __call__(self, x):
-        # Expand the representation, apply a non-linearity, then project
+        # Expanding the representation, apply a non-linearity, then project
         # back down to the original embedding size.
         x = nn.Dense(
             4 * self.embed_dim
@@ -125,7 +129,7 @@ class TransformerBlock(nn.Module):
             nn.LayerNorm()(x)
         )
 
-        # Residual connection around the feed-forward network.
+        # Residual connections around the feed-forward network.
         x = x + FeedForward(
             self.embed_dim
         )(
@@ -151,13 +155,13 @@ class GPT(nn.Module):
         # B = batch size, T = sequence length.
         B, T = idx.shape
 
-        # Convert token IDs into learned vector representations.
+        # Converting token IDs into learned vector representations.
         tok_emb = nn.Embed(
             self.vocab_size,
             self.embed_dim
         )(idx)
 
-        # Generate token positions so the model knows token order.
+        # Generating token positions so the model knows token order.
         pos = jnp.arange(T)
 
         # Learn a representation for each position in the sequence.
@@ -166,10 +170,10 @@ class GPT(nn.Module):
             self.embed_dim
         )(pos)
 
-        # Combine token meaning with position information.
+        # Combining token meaning with position information.
         x = tok_emb + pos_emb
 
-        # Stack multiple transformer blocks to learn complex language patterns.
+        # Stacking multiple transformer blocks to learn complex language patterns.
         for _ in range(
             self.num_layers
         ):
@@ -180,7 +184,7 @@ class GPT(nn.Module):
 
         x = nn.LayerNorm()(x)
 
-        # Produce scores for every possible next token.
+        # Producing scores for every possible next token.
         logits = nn.Dense(
             self.vocab_size
         )(x)
