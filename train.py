@@ -17,7 +17,7 @@ print(jax.devices())
 
 # Loading raw text and build vocabulary
 text = load_text()  # Raw text string from file
-stoi, itos = build_vocab(text)  # stoi: char→ID, itos: ID→char
+stoi, itos = build_vocab(text)  # stoi: char to ID, itos: ID to char
 data = encode(text, stoi)  # Convert text to integer token IDs
 vocab_size = len(stoi)  # Total number of unique characters
 
