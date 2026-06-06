@@ -55,7 +55,7 @@ input_tokens = jnp.array([
     [stoi[c] for c in prompt]  # Converting each character to integer token ID
 ])
 
-# Autoregressive generation: predict next token 200 times, append each time
+# Autoregressive generation, predicts next token 200 times, append each time
 for _ in range(200):
     # Predicting next token based on current sequence
     next_token = generate_step(params, input_tokens)
