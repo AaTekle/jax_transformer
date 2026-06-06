@@ -12,7 +12,7 @@ from data import (
     get_batch  # Sample minibatches for training
 )
 
-# Checking available devices (GPU/TPU/CPU)
+# Checking available devices
 print(jax.devices())
 
 # Loading raw text and build vocabulary
