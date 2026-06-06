@@ -167,7 +167,7 @@ class GPT(nn.Module):
         # Generating token positions so the model knows token order.
         pos = jnp.arange(T)
 
-        # Learn a representation for each position in the sequence.
+        # Learning a representation for each position in the sequence.
         pos_emb = nn.Embed(
             self.block_size,
             self.embed_dim
