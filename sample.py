@@ -55,6 +55,18 @@ input_tokens = jnp.array([
     [stoi[c] for c in prompt]  # Converting each character to integer token ID
 ])
 
+'''
+Autoregressive generation
+
+- sequential prediction loop used by Large Language Models (e.g., ChatGPT or Llama) to write text
+- instead of generating an entire paragraph in a single split-second calculation, the model behaves like a human typing on a keyboard, it stops after every single word (token), reads everything written so far, picks the next word, and repeats the process until it generates a "stop" signal.
+
+## autoregressive generation use cases and benefits:
+
+- Language relies on context, you cannot accurately predict word #10 in a sentence without knowing exactly what words #1 through #9 are.
+- Models cannot predict the future, a neural network can only calculate probabilities based on known data. Since the model doesn’t know what it is going to say until it says it, it must generate step-by-step to build its own context.
+- It preserves coherence, by feeding its own outputs back into itself, the model maintains a continuous "train of thought," making sure that word #11 logically follows word #10.
+'''
 # Autoregressive generation, predicts next token 200 times, append each time
 for _ in range(200):
     # Predicting next token based on current sequence
