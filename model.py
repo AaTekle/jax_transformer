@@ -1,11 +1,6 @@
 import jax
 import jax.numpy as jnp
-
 from flax import linen as nn
-
-'''
-whole script is about moving information through clean, predictable tensor shapes at every step.
-'''
 
 class MultiHeadSelfAttention(nn.Module):
     # Embedding size for each token representation.
